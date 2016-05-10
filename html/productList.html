@@ -1,0 +1,29 @@
+
+	<div class="panel panel-default row" ng-hide="data.error">
+		<div class="col-sm-3">
+			<a href="" class="btn btn-block btn-default btn-lg"  ng-class="getCategoryClass(null,'btn-success')" ng-click="selectCategory()">Home</a>
+			<a href="" class="btn btn-block btn-default btn-lg" ng-repeat="item in data.products|unique:'category'|orderBy:'category' "  ng-class="getCategoryClass(item,'btn-primary')" ng-click="selectCategory(item)">{{item}}</a>
+		</div>
+		<div class="col-sm-8">
+			<div class="well" ng-repeat="item in data.products|filter:categoryFilterFn|range:selectedPage:pageSize">
+				<h3>
+					<strong>{{item.name}}</strong>
+					<span class="pull-right label label-primary">
+						{{item.price|currency}}
+					</span>
+				</h3>
+				<button class="btn btn-success pull-right" ng-click="addProductToCart(item)">Add to cart</button>
+				<span class="lead">
+					{{item.description}}
+				</span>
+			</div>
+			<div class="pull-right btn-group">
+				<a href="" class="btn btn-default" 
+				ng-repeat="page in data.products|filter:categoryFilterFn|pageCount:pageSize"
+				ng-click="selectPage($index+1)"
+				ng-class="getPageClass($index+1)"
+				>{{$index+1}}</a>
+
+			</div>
+		</div>
+	</div>

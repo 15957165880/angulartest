@@ -1,0 +1,12 @@
+{
+		"products":[
+			{"name":"Product #1","description":"A product","category":"Category #1","price":100,"id":1011212},
+			{"name":"Product #2","description":"B product","category":"Category #2","price":110,"id":1011213},
+			{"name":"Product #3","description":"C product","category":"Category #3","price":120,"id":1011214},
+			{"name":"Product #4","description":"D product","category":"Category #2","price":130,"id":1011215},
+			{"name":"Product #5","description":"E product","category":"Category #2","price":150,"id":1011216},
+			{"name":"Product #6","description":"F product","category":"Category #3","price":160,"id":1011217},
+			{"name":"Product #7","description":"G product","category":"Category #2","price":730,"id":1011218},
+			{"name":"Product #8","description":"H product","category":"Category #2","price":930,"id":1011219}
+		]
+	}

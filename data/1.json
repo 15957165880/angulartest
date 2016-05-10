@@ -1,0 +1,8 @@
+{
+	"user":"adam",
+	"items":[
+		{"action":"buy flower","done":false},
+		{"action":"get shoes","done":false},
+		{"action":"call joe","done":true}
+	]
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sportsStore">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/controller/sportsStore.js"></script>
+    <script type="text/javascript" src="js/filter/customFilter.js"></script>
+    <script type="text/javascript" src="js/factory/cart.js"></script>
+</head>
+
+<body ng-controller="sportsStoreControl">
+	<div class="navbar navbar-inverse">
+		<a href="#" class="navbar-brand">sportsStore</a>
+		<cart-summary />
+	</div>
+	<div class="alert alert-danger" ng-show="data.error">
+		Error({{data.statu}}).The product data was not loaded.
+		<a class="alert-link" href="/app.html">Click hero to try again</a>
+	</div>
+	<ng-include src="'html/productList.html'"></ng-include> 
+	
+
+</body>
+
+</html>

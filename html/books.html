@@ -1,0 +1,20 @@
+	<div class="navbar navbar-inverse">
+		<a class="navbar-brand">sports store</a>
+	</div>
+	<div class="panel pannel-default row">
+		<div class="col-md-3 " ng-click="changeParam($event.target)">
+			<a href="#" class="btn btn-block btn-default btn-lg" param="">Home</a>
+			<a href="#" class="btn btn-block btn-default btn-lg" ng-repeat="nav in navList(books,'c')" param={{nav}} index="{{$index}}">{{nav}}</a>
+		</div>
+		<div class="col-md-8">
+			<div class="well" ng-repeat="book in books|booksSelect:param">
+				<h3>
+					<strong>{{book.n}}</strong>
+					<span class="pull-right label label-default">
+						{{book.p|currency:'￥'}}
+					</span>
+				</h3>
+				<span class="lead">{{book.d}}</span>	
+			</div>
+		</div>
+	</div>	
