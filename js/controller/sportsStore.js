@@ -1,5 +1,14 @@
-angular.module("sportsStore", ["customFilter","cart"])
-
+angular.module("sportsStore", ["customFilter","cart","ngRoute"])
+.constant("dataUrl","data/products.json")
+.constant("selecltedCategory",null)
+.constant("activeClass","btn-primary")
+.config(["$routeProvider",function($routeProvider){
+	$routeProvider
+	.when("products",{
+		templateUrl:"html/productList.html"
+	})
+	.otherwise({templateUrl:"html/productList.html"})
+}])
 .controller("sportsStoreControl",["$scope","$http","$filter","dataUrl","selecltedCategory","activeClass","cart",
 	function($scope,$http,$filter,dataUrl,selecltedCategory,activeClass,cart){
 	$http.get(dataUrl)
@@ -38,9 +47,6 @@ angular.module("sportsStore", ["customFilter","cart"])
 		cart.addProduct(product.id,product.name,product.price)
 	}
 }])
-.constant("dataUrl","data/products.json")
-.constant("selecltedCategory",null)
-.constant("activeClass","btn-primary")
 
 
 
