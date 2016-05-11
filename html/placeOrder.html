@@ -1,0 +1,33 @@
+	<style type="text/css">
+		.ng-invalid{ background-color:lightpink; }
+		.ng-valid{background-color:lightgreen;}
+		span.error{color:red;font-weight:bold;}
+	</style>
+	<h2>placeOrder</h2>
+	<p>place enter your details,and we'll ship your goods right away!</p>
+	<form name="shoppingFrom" novalidate>
+		<div class="well">
+			<h3>ship to</h3>
+			<div class="from-group">
+			    <label for="">name</label>
+			    <input type="text" class="form-control" ng-model="data.shopping.name" name="name" required>
+			    <span class="error" ng-show="shippingForm.name.$error.required">
+			    	pleace enter a name
+			    </span>
+			</div>
+
+			<h3>address</h3>
+			<div class="from-group">
+			    <label for="">steet address</label>
+			    <input type="text" class="form-control" ng-model="data.shopping.street" name="street" required>
+			    <span class="error" ng-show="shippingForm.street.$error.required">
+			    	pleace enter a street address
+			    </span>
+			</div>
+
+			<h3></h3>
+			<div class="text-center">
+			    <button class="btn btn-primary" ng-disabled="shippingForm.$invalid">complete order</button>
+			</div>
+		</div>
+	</form>

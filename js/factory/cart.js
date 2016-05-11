@@ -5,7 +5,7 @@ angular.module("cart", [])
 		addProduct:function(id,name,price){
 			var ifAddedItem=false;
 			for(var i=0;i< cartData.length;i++){
-				if(cartData[i]==id){
+				if(cartData[i].id==id){
 					cartData[i].count++;
 					ifAddedItem=true;
 					break;
@@ -19,7 +19,7 @@ angular.module("cart", [])
 		},
 		removeProduct:function(id){
 			for(var i=0;i< cartData.length;i++){
-				if(cartData[i]==id){
+				if(cartData[i].id==id){
 					cartData.splice(i,1)
 					break;
 				}

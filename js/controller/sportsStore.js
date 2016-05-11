@@ -4,8 +4,14 @@ angular.module("sportsStore", ["customFilter","cart","ngRoute"])
 .constant("activeClass","btn-primary")
 .config(["$routeProvider",function($routeProvider){
 	$routeProvider
-	.when("products",{
+	.when("/products",{
 		templateUrl:"html/productList.html"
+	})
+	.when("/placeorder",{
+		templateUrl:"html/placeOrder.html"
+	})
+	.when("/checkout",{
+		templateUrl:"html/checkoutSummary.html"
 	})
 	.otherwise({templateUrl:"html/productList.html"})
 }])
