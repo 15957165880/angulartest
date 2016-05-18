@@ -21,11 +21,20 @@ var typeObj={
 
 // 创建服务器
 http.createServer( function (request, response,dd) {  
+
+ request.on('data',function(chunk){
+    //这里的 chunk 就是客户端表单提交过来的东西
+         console.log(chunk)
+ })
+
    // 解析请求，包括文件名
-   var pathname = url.parse(request.url).pathname;
+   //var pathname = url.parse(request.url).pathname;
    // console.log(pathname.substr(1))
    
-   var fsName=pathname.substr(1);
+
+
+
+   //var fsName=pathname.substr(1);
 
 
 	 // fs.writeFile('a.txt', a,function (err) {
@@ -35,13 +44,15 @@ http.createServer( function (request, response,dd) {
 	 // // console.log(pathname)
     // console.log(request.method)
 
-    var method=request.method
+    //var method=request.method
 
-    if(method.toLowerCase()=="post"){
-
-      var urlArr=fsName.split('/')
-      var data1={"dfdf":"dfdsaf"}
-      fs.readFile(fsName, function (err, data) {
+    //if(method.toLowerCase()=="post"){
+     // for (var i in request) {
+     //    console.log(i)
+     // }
+      //var urlArr=fsName.split('/')
+      //var data1={"dfdf":"dfdsaf"}
+    //     fs.readFile(fsName, function (err, data) {
          if(err){
             // console.log(err)
             console.log(fsName)
@@ -62,11 +73,11 @@ http.createServer( function (request, response,dd) {
               }) ;
          }
 
-      })
-    }
+     // })
+    //}
 
 
-   fs.readFile(pathname.substr(1), function (err, data) {
+   //fs.readFile(pathname.substr(1), function (err, data) {
    	var fsNameAft=fsName.split('.')[1]
    	var conType=typeObj[fsNameAft]
 
@@ -87,6 +98,6 @@ http.createServer( function (request, response,dd) {
       }
       //  发送响应数据
       response.end();
-   });   
+   //});   
 }).listen(8082);
 

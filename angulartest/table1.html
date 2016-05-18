@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+            font-size:12px;
+        }
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true,id:1},
+                {action:"chifan",complete:true,id:2},
+                {action:"shuijiao",complete:false,id:3},
+                {action:"xiuxi",complete:false,id:4},
+                {action:"jiaoliu",complete:false,id:5},
+                {action:"looktv",complete:false,id:6},
+                {action:"read",complete:false,id:7},
+        ])
+        .controller('ctrl',function($scope,todos,$http){
+            $scope.todos=todos
+            $scope.newId=function(){
+                var id=$scope.todos[$scope.todos.length-1].id
+                return id+1
+            }
+            $scope.addNewItem=function(newItem){
+                
+                $scope.todos.push({
+                    action:newItem.action+"("+newItem.location+")",
+                    complete:false,
+                    id:$scope.newId()
+                })
+                $scope.newTodo={}
+            }
+        })
+
+        
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+        <h3 class="panel-header">
+            to do list
+            <span>
+                {{(todos|filter:{complete:false}).length}}
+            </span>
+        </h3>
+
+
+        <div class="row">
+            <div class="col-sm-4">
+                <form name="addTodo" novalidate>   
+                    <div class="well">
+                        <div class="form-group row">
+                            <label for="action">action</label>
+                            <input type="text" id="action" class="form-control" name="action" ng-model="newTodo.action" required>
+                            <!-- <span class="error" ng-show="addTodo.action.$invalid">
+                                请输入
+                            </span> -->
+                        </div>
+                        <div class="form-group row">
+                            <label for="location">location</label>
+                            <select id="location" class="form-control" name="location" ng-model="newTodo.location" required>
+                                <option >home</option>
+                                <option >office</option>
+                                <option >mail</option>
+                            </select>
+                            <!-- <span class="error" ng-show="addTodo.location.$invalid">
+                                请选择
+                            </span> -->
+                        </div>
+
+                        <button class="btn btn-info btn-block text-capitalize"
+                        ng-disabled="addTodo.$invalid"
+
+                        ng-click="addNewItem(newTodo)">
+                            add
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-8">   
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>action</th>
+                            <th>complete</th>
+                            <th>done</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in todos">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.action}}</td>
+                            <td>{{item.complete}}</td>
+                            <td>
+                                <label class="checkbox"> 
+                                    <input type="checkbox" ng-model="item.complete" >
+                                    click
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm"
+                                ng-click="removeItem(item)"
+                                >remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>   
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+    
+       angular.module('app',["ngRoute"])
+       .controller('today',function($scope,days){
+            $scope.day=days.today
+            $scope.addDay=function(){
+                // $scope.day++
+            }
+        })
+       .controller('tomorrow',function($scope,days1){
+            $scope.day=days1.tomorrow
+       })
+       .controller('afterTomorrow',function($scope,days1,days2){
+            $scope.day=days2.afterTomorrow
+       })
+       .directive('highLight',function($filter){
+            return{   
+                restrict:'A',
+                link:function(scope,ele,attrs){
+                    var dayFilter=$filter("dayName")
+                    if(dayFilter(scope.day)==attrs.highlight){
+                        ele.css({
+                            color:"red"
+                        })
+                    }else{
+                        ele.css({
+                            color:"#666"
+                        }) 
+                    }
+                    ele.on('click',function(){
+                        scope.$apply(function(){
+
+                            scope.day++
+                            
+                            if(dayFilter(scope.day)==attrs.highlight){
+                                ele.css({
+                                    color:"red"
+                                })
+                            }else{
+                                ele.css({
+                                    color:"#666"
+                                }) 
+                            }
+                        })
+                    })
+                }
+            }
+       })
+       .filter('dayName',function(){
+            var days=["sunday",'monday','tuesday','wednesday','thursday','friday','saturday']
+            return function(input){
+                return angular.isNumber(input)?days[input%7]:input;
+            }
+       })
+       .filter('char2',function(){
+            return function(data,index){
+                if(!angular.isString(data)||!angular.isNumber(index)){
+                     return data
+
+                }else{
+                    console.log(data.length)
+                    if(index>data.length){
+                        return data
+                    }else{
+                        var a=data.split('')
+                            a.splice(index-1,0,"(unknown)")
+
+                        return a.join('')
+                    }
+                }
+            }
+       })
+       .service("days",function(nowDay){
+            this.today=nowDay%7
+            this.tomorrow=(nowDay+1)%7
+       })
+       .factory("days1",function(nowDay){
+            return {
+                today:nowDay%7,
+                tomorrow:(nowDay+1)%7,
+                afterTomorrow:(nowDay+2)%7
+            }
+       })
+       .provider("days2",function(){
+         this.nowDay=new Date().getDay()
+         this.$get=function(){
+            return {
+                today:(this.nowDay)%7,
+                tomorrow:(this.nowDay+1)%7,
+                afterTomorrow:(this.nowDay+2)%7 
+            }
+         }
+       })
+       .config(function(){
+            console.log("config")
+       })
+       .run(function(){
+            console.log("run")
+       })
+       .config(function(){
+            console.log("config1")
+       })
+
+
+       angular.module('app')
+       .controller('charCtrl',function($scope){
+            $scope.str="avb"
+       })
+       .value("nowDay",new Date().getDay())
+       // .constant("nowDay",new Date().getDay())
+
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel">
+        <div class="panel-header">
+            <h3>angular app</h3>
+        </div>
+        <div class="panel-body">
+            <h4 ng-controller="today" high-light highlight="tuesday" >today is {{day||'(unknown)'|dayName}}</h4>
+            <h4 ng-controller="tomorrow" high-light highlight="tuesday">tomorrow is {{day||'(unknown)'|dayName}}</h4>
+            <h4 ng-controller="afterTomorrow" high-light highlight="sunday">tomorrow is {{day||'(unknown)'|dayName}}</h4>
+        </div>
+        <h3 ng-controller="charCtrl">{{str|char2:3}}</h3>
+
+    </div>
+    
+</body>
+
+</html>

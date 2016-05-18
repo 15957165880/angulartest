@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true,id:1},
+                {action:"chifan",complete:true,id:2},
+                {action:"shuijiao",complete:false,id:3},
+                {action:"xiuxi",complete:false,id:4},
+                {action:"jiaoliu",complete:false,id:5},
+                {action:"looktv",complete:false,id:6},
+                {action:"read",complete:false,id:7},
+        ])
+        .controller('ctrl',function($scope){
+            $scope.message='Raedy'
+            $scope.addUser=function(userDetails){
+                // $scope.message="name: "+userDetails.name+" / email :"+userDetails.email+" / agree: "+userDetails.agree
+                $scope.message=userDetails
+                $scope.newUser={}
+            }
+
+        })
+
+        
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+   
+           
+        <form name="myForm" novalidate ng-submit="addUser(newUser)">   
+            <div class="well">
+                <div class="form-group row">
+                    <label for="name">name</label>
+                    <input type="text" id="name" class="form-control" name="name" ng-model="newUser.name"  required>
+                    <span class="error" ng-show="myForm.name.$invalid&&myForm.name.$dirty">
+                        name is invalid
+                        {{myForm.name.$error}}
+                    </span>
+<!--                     <span class="error">
+                        {{myForm.name.$pristine?"please enter a name":myForm.name.$invalid?"please enter a valid name":""}}
+                    </span> -->
+                </div>
+                <div class="form-group row">
+                    <label for="email">email</label>
+                    <input type="email" id="email" class="form-control" name="email" ng-model="newUser.email"  required>
+                    <span class="error" >
+                        name is invalid
+                        {{myForm.email}}
+                    </span>
+<!--                     <span class="error">
+                        {{myForm.email.$pristine?"please enter a email":myForm.email.$invalid?"please enter a valid email":""}}
+                    </span> -->
+                </div>
+
+                <div class="form-group row">
+                    <label for="url">url</label>
+                    <input type="url" id="url" class="form-control" name="url" ng-model="newUser.url"  required>
+                    <span class="error" ng-show="myForm.url.$invalid">
+                        url is invalid
+                    </span>
+                </div>
+
+                <div class="form-group row">
+                    <label for="number">number</label>
+                    <input type="number" id="number" class="form-control" name="number" ng-model="newUser.number"  required>
+                    <span class="error" ng-show="myForm.number.$invalid">
+                        number is invalid
+                    </span>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="agree" ng-model="newUser.agree" required>
+                        i agree to the  terms and conditions
+                    </label>
+                    <span class="error" ng-show="myForm.agree.$invalid">
+                        agree is invalid
+                    </span>
+                </div>
+
+                <button type="submit" class="btn btn-info btn-block" ng-disabled="myForm.$invalid">OK</button>
+            </div>
+
+            <div class="well text-lowercase">
+                <p>
+                    message : {{message}}
+                </p>
+                <p>
+                    valid :
+                    <span class="summary" ng-class="myForm.$valid?'ng-valid':'ng-invalid'">
+                     {{myForm.$valid}}
+                    </span>
+                </p>
+            </div>
+        </form>
+           
+             
+
+    </div>
+</body>
+
+</html>

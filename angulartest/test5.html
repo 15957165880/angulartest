@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("app",["route"])
+        angular.module("route",["ngRoute"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true},
+                {action:"chifan",complete:true},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+        ])
+        .controller('ctrl',function($scope,todos,$http,$timeout){
+            $scope.todos=todos
+
+            $scope.buttons=["red","green","blue"]
+
+            $scope.settings={
+                row:"red",
+                column:"green"
+            }
+
+            $scope.data={
+                row:"blue",
+                column:'green'
+            }
+            $scope.handleEvent=function(e){
+                console.log(e.type)
+                $scope.data.column=e.type=="mouseover"?'green':'blue'
+            }
+
+            $scope.copyEvent=function(){
+                console.log("copyEvent")
+            }
+            $scope.cutEvent=function(){
+                console.log("cutEvent")
+            }
+            $scope.pasteEvent=function(){
+                console.log("pasteEvent")
+            }
+            $scope.focusEvent=function(){
+                console.log("focusEvent")
+            }
+
+
+            $scope.selectEvent=function(){
+                console.log("selectEvent")
+
+
+            }
+        })
+
+
+    
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+        <h3>todo list</h3>
+        <h4>there are {{todos.length||'unknown'}} items</h4>
+
+        <div class="row well">
+            <div class="col-xs-6" ng-repeat="(key,val) in settings">
+                <h4>{{key}}</h4>
+                <div class="radio" ng-repeat="button in buttons">
+                    <label for="">
+                        <input type="radio" ng-model="settings[key]" value="{{button}}">{{button}}
+                        {{settings[key]}}
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <table class="table  table-hover table-condensed " 
+        ng-copy="copyEvent()" 
+        ng-cut="cutEvent()" 
+        ng-paste="pasteEvent()" 
+        ng-focus="focusEvent()"
+        ng-select="selectEvent()">
+            <thead >
+                <tr >
+                    <th>#</th>
+                    <th>action</th>
+                    <th>compelete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in todos"  ng-class="settings.row"
+                >
+                    <td>{{$index+1}}</td>
+                    <td>{{item.action}}</td>
+                    <td ng-style="{'background-color':settings.column}" ng-class="data.column" ng-hide=true>
+                        <!-- <span>{{item.complete}}</span> -->
+                        <!-- <span ng-show="item.complete">(incomplete)</span>    -->
+                        <!-- <span ng-hide="item.complete">(done)</span> -->
+                        <span ng-if="!item.complete">(incomplete)</span>   
+                        <span ng-if="item.complete">(done)</span>
+                    </td>
+                    <td ng-class="data.column"
+                    ng-mouseenter="handleEvent($event)"
+                    ng-mouseleave="handleEvent($event)">
+                        <!-- <span>{{item.complete}}</span> -->
+                        <!-- <span ng-show="item.complete">(incomplete)</span>    -->
+                        <!-- <span ng-hide="item.complete">(done)</span> -->
+                        <span ng-if="!item.complete">(incomplete)</span>   
+                        <span ng-if="item.complete">(done)</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

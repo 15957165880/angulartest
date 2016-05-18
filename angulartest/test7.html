@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true},
+                {action:"chifan",complete:true},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+        ])
+        .controller('ctrl',function($scope,todos,$http,$timeout){
+            $scope.message="tap me!"
+        })
+        .directive('tap',function(){
+            return function(s,e,a){
+                e.on('touchstart ',function(){
+                    s.$apply(function(){
+                        s.message='touchstart '
+                    })
+                    console.log('touchstart')
+                })
+                e.on(' touchend',function(){
+                    s.$apply(function(){
+                        s.message='touchend '
+                    })
+                    console.log('touchend')
+                })
+                e.on(' touchmove',function(){
+                    s.$apply(function(){
+                        s.message='touchmove '
+                    })
+                    console.log('touchmove')
+                })
+            }
+        })
+
+
+    
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+        <div class="well" tap="message">
+            {{message}}
+        </div>
+   
+    </div>
+</body>
+
+</html>

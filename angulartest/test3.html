@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <style type="text/css">
+        .red{color:red;}
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("app",["route"])
+        angular.module("route",["ngRoute"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true},
+                {action:"chifan",complete:true},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+                {action:"shuijiao",complete:false},
+        ])
+        .value("backColor",["success","info","warning"])
+        .controller('ctrl',function($scope,todos,backColor,$http,$timeout){
+            $scope.todos=todos
+            $scope.backColor=backColor
+            // $scope.showList=true
+            $scope.viewChange=function(){
+                return $scope.showList?"html/ollist.html":"html/tablist.html"
+            }
+            $scope.data={}
+            $http.get("data/test1.json")
+            .success(function(rep){
+                console.log(rep)
+
+
+                $timeout(function(){
+
+                    $scope.arr=rep
+                },1000)
+            })
+            .error(function(err){
+
+            })
+            .finally(function(){
+
+            })
+        })
+        .controller('ctrl1',function($scope,todos,backColor){
+            $scope.todos=todos
+            $scope.backColor=backColor
+        })
+        .directive('changeAction',function(){
+            return {
+                restrict:'A',
+                scope:{
+                    act:"@act"
+                },
+                // template:"<h4>act</h4>",
+                link:function(s,e,a){
+                    console.log(s.act)
+                    e.on('keyup',function(){
+
+                        console.log(a)
+                    })
+                }
+
+            }
+        })
+    
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+        <h3>todo list</h3>
+        <h4>there are {{todos.length||'unknown'}} items</h4>
+
+        <div ng-bind-template="first:{{todos[0].action}}"></div>
+        <!-- 执行绑定 -->
+
+        <div ng-non-bindable>{{todos[0].action}}</div>
+        <!-- 禁止绑定 ng-non-bindable -->
+
+<!--         <div class="form-group well">
+            <label for="firstname">set first item</label>
+            <input type="text" id='firstname' class="form-control" ng-model="todos[0].action"  >
+        </div> -->
+        <div class="form-group well">
+            <div class="checkbox">
+                <label >
+                    <input type="checkbox"   ng-model="showList" value="1"  >
+                    view change: {{viewChange()}}
+                </label>
+                  
+            </div>
+        </div>
+        <div class="form-group well" ng-cloak>
+            <p>{{arr}}</p>
+        </div>
+        <div class="form-group well" ng-cloak>
+            <div class="radio" ng-repeat="button in ['none','table','list']">
+                <label>
+                    <input type="radio" ng-model="data.model" value="{{button}}" >
+                    {{button}}
+                </label>
+            </div>
+        </div>
+        <div ng-switch on="data.model">
+            <span>{{data.model}}</span>
+            <div ng-switch-when='none' ng-style="{color:'green'}">none</div>
+            <div ng-switch-when='table' ng-class={red:data.model=="table"}>table</div>
+            <div ng-switch-when='list'>list</div>
+            <div ng-switch-default>default</div>
+        </div>
+<!--         <ul class="list-group">
+            <li class="list-group-item" ng-repeat="item in todos">{{item.action}}</li>
+        </ul> -->
+        
+        <ng-include src="viewChange()"/>
+
+
+    </div>
+<!--     <div class="panel" ng-controller="ctrl1">
+        <div class="form-group well">
+            <h3>{{todos[0].action}}</h3>
+        </div>
+    </div> -->
+ 
+    
+</body>
+
+</html>
