@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true,id:1},
+                {action:"chifan",complete:true,id:2},
+                {action:"shuijiao",complete:false,id:3},
+                {action:"xiuxi",complete:false,id:4},
+                {action:"jiaoliu",complete:false,id:5},
+                {action:"looktv",complete:false,id:6},
+                {action:"read",complete:false,id:7},
+        ])
+        .controller('ctrl',function($scope){
+            $scope.message='Raedy'
+            $scope.addUser=function(userDetails){
+                // $scope.message="name: "+userDetails.name+" / email :"+userDetails.email+" / agree: "+userDetails.agree
+                $scope.message=userDetails
+                $scope.newUser={}
+                $scope.textRequired=true
+                $scope.textMatch=new RegExp("^[a-z]")
+            }
+
+        })
+
+        
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+   
+           
+        <form name="myForm" novalidate >   
+            <div class="well">
+                <div class="form-group">
+                    <textarea name="textarea" cols="40" rows="3"
+                        ng-model="textVal"
+                        ng-required="true"
+                        ng-minlength="2"
+                        ng-maxlength="5"
+                        ng-pattern="textMatch">
+                        
+                    </textarea>
+                </div>
+            </div>
+            <div class="well">
+                <p>required error:{{myForm.textarea.$error.required}}</p>
+                <p>minlength error:{{myForm.textarea.$error.minlength}}</p>
+                <P>maxlength error:{{myForm.textarea.$error.maxlength}}</P>
+                <p>pattern error:{{myForm.textarea.$error.pattern}}</p>
+                <P>element error:{{myForm.textarea.$valid}}</P>
+            </div>
+        </form>
+           
+             
+
+    </div>
+</body>
+
+</html>

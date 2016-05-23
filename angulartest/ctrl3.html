@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true,id:100,class:"study"},
+                {action:"chifan",complete:true,id:2,class:"life"},
+                {action:"shuijiao",complete:false,id:3,class:"life"},
+                {action:"xiuxi",complete:false,id:4,class:"life"},
+                {action:"jiaoliu",complete:false,id:5,class:"social "},
+                {action:"watchtv",complete:false,id:6,class:"life"},
+                {action:"read",complete:false,id:7,class:"study"},
+        ])
+        .controller('ctrl',function($scope,updata){
+            $scope.addresses={};
+            $scope.$on('updata',function(event,args){
+                console.log(args)
+                 $scope[args.type]=args.val
+                 $scope.addresses[args.type]=args.val
+
+            })
+            $scope.setAddress=function(type,val){
+                // $rootScope.$broadcast('updata',{
+                //     type:type,
+                //     val:val
+                // })
+                updata.setData(type,val)
+            }
+            $scope.copyAddress=function(type){
+                if(type=="billing"){
+                    $scope.shippingzip=$scope.billingzip
+                }
+                if(type=="shipping"){
+                    $scope.billingzip=$scope.shippingzip
+                }
+            }
+        })
+        .service('updata',function($rootScope){
+            this.setData=function(type,val){
+                console.log([type,val])
+                $rootScope.$broadcast('updata',{
+                    type:type,
+                    val:val
+                })
+            }
+        })
+
+        
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize" >
+    <div class="well" ng-controller="ctrl">
+        <h4>billing zip code</h4>
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="billingzip">
+        </div>
+        <button class="btn btn-primary" ng-click="copyAddress('shipping')">use shipping</button>
+        <button class="btn btn-primary" ng-click="setAddress('billingzip',billingzip)">save billing</button>
+    </div>
+    <div class="well" ng-controller="ctrl">
+        <h4>shipping zip code</h4> 
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model=shippingzip>
+        </div>
+        <button class="btn btn-primary" ng-click="copyAddress('billing')">use billing</button>
+        <button class="btn btn-primary" ng-click="setAddress('shippingzip',shippingzip)">save shipping</button>
+    </div>
+
+    <div class="well" ng-controller="ctrl">
+        <h4>addresse:</h4>
+        <p>{{addresses||'unknown'}}</p>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style type="text/css">
+        tr.red {
+            background-color: lightcoral;
+        }
+        
+        tr.green {
+            background-color: lightgreen;
+        }
+        
+        tr.blue {
+            background-color: lightblue;
+        }
+        
+        .red {
+            background-color: lightcoral;
+        }
+        
+        .green {
+            background-color: lightgreen;
+        }
+        
+        .blue {
+            background-color: lightblue;
+        }
+        
+        span.error {
+            color: rgb(187, 55, 55);
+        }
+        
+        span.summary.ng-invalid {
+            color: red;
+        }
+        
+        span.summary.ng-valid {
+            color: green;
+        }
+    </style>
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/public/jquery-1.11.3.js"></script>
+    <script type="text/javascript">
+        angular.module("route", ["ngRoute"])
+        angular.module("app", ["route"])
+        angular.module("app")
+            .value("todos", [{
+                action: "xuexi",
+                complete: true,
+                id: 100,
+                class: "study"
+            }, {
+                action: "chifan",
+                complete: true,
+                id: 2,
+                class: "life"
+            }, {
+                action: "shuijiao",
+                complete: false,
+                id: 3,
+                class: "life"
+            }, {
+                action: "xiuxi",
+                complete: false,
+                id: 4,
+                class: "life"
+            }, {
+                action: "jiaoliu",
+                complete: false,
+                id: 5,
+                class: "social "
+            }, {
+                action: "watchtv",
+                complete: false,
+                id: 6,
+                class: "life"
+            }, {
+                action: "read",
+                complete: false,
+                id: 7,
+                class: "study"
+            }, ])
+
+        .controller('ctrl', function($scope) {
+            $scope.clickCount=0
+            $scope.btnEnable=true
+            $scope.addCount=function(){
+                $scope.clickCount++
+            }
+            $scope.$watch('btnEnable',function(n,o){
+                if(n) $("#jqbtn").show();
+                else $("#jqbtn").hide();
+                fn(n)
+            })
+
+
+        })
+
+        function fn(n){
+            console.log(n)
+        }
+
+        $(document).ready(function($apply){
+            $("#jqbtn").click(function(e){
+                // angular.element("#jqbtn").scope().$apply('addCount')
+                // angular.element(document).find('#d').html("d")
+                console.log(angular.element(["#jqbtn"]).scope().$apply('addCount'))
+            })
+        })
+    </script>
+</head>
+
+<body class="text-capitalize">
+    <div class="well" ng-controller="ctrl">
+        <h4>angular</h4>
+        <div class="checkbox ">
+            <label >
+                <input type="checkbox"  ng-model="btnEnable"> btn
+            </label>
+        </div>
+        click count:{{clickCount}}
+    </div>
+    <div class="well" >
+        <h4>jq ui</h4>
+        <button id="jqbtn">click me!</button>
+        <p id="d"></p>
+    </div>
+</body>
+
+</html>

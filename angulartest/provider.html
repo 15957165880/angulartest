@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .controller('ctrl',function($scope,logService){
+            $scope.data={
+                citys:["new york","london","paris"],
+                totalClicks:0
+            }
+            // $scope.$watch('data.totalClicks',function(newVal){
+            //     logService.log(newVal)
+            // })
+        })
+        .directive('triButton',function(logProvider,logService){
+            return {
+                scope:{counter:'=counter'},
+                link:function(scope,ele,attrs){
+                    ele.on('click',function(event){
+                        scope.$apply(function(){
+                            scope.counter++
+                        })
+                        logProvider.log(scope.counter)
+                        logService.log(event.target.innerText)
+                    })
+                }
+            }
+        })
+        .value('citys',["new york","london","paris"])
+        .factory('logFactory',function(citys){
+            return{
+                log:function(msg){
+                    console.log(msg+1)
+                }
+            }
+        })
+        .service('logService',function(logFactory,logProvider,$location){
+            this.log=function(msg){
+                 console.log(msg)
+                 console.log($location)
+                 $location.path("/dd")
+            }
+        })
+        .provider('logProvider',function(){
+            return {
+                $get:function(logFactory){
+                    return {
+                        log:function(msg){
+                            console.log(msg)
+                        }
+                    }
+                }
+            }
+        })
+
+
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+   <div class="well">
+       <div class="btn-group" counter="data.totalClicks" source="data.citys" tri-button>
+           <button class="btn btn-default" ng-repeat="city in data.citys">{{city}}</button>
+           
+       </div>
+       <h5>total clicks: {{data.totalClicks}}</h5>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+
+        .value("products",[
+            {name:"apple",category:"fruit",price:1.20,expiry:10}
+            ,{name:"bananas",category:"fruit",price:2.40,expiry:7}
+            ,{name:"pears",category:"fruit",price:2.02,expiry:6}
+
+            ,{name:"tuna",category:"fish",price:20.02,expiry:3}
+            ,{name:"salmon",category:"fish",price:17.93,expiry:2}
+            ,{name:"trout",category:"fish",price:12.93,expiry:5}
+
+            ,{name:"beer",category:"drinks",price:2.99,expiry:365}
+            ,{name:"trout",category:"drinks",price:8.93,expiry:300}
+            ,{name:"trout",category:"drinks",price:45.99,expiry:355}
+        ])
+        .controller('ctrl',function($scope,products){
+           $scope.products=products
+
+        })
+        .directive("unorderedList",function(){
+            return {
+                restrict:"A",
+                template:"<ul class='list-group'><li class='list-group-item' list-item={{$index+1}}  ng-repeat='item in data' >{{item}}</li></ul>",
+                link:function(scope,ele,attrs){
+                    scope.data=scope[attrs.unorderedList]
+
+                }
+            }
+        })
+        .directive("listItem",function(){
+            return {
+                restrict:"A",
+                link:function(scope,ele,attrs){
+                    console.log(attrs.listItem)
+                    ele.css({
+                        color:attrs.listItem%2==0?'red':'block'
+                    })
+
+                }
+            }
+        })   
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>products</h3>
+        </div>
+        <div class="panel-body">
+            <div unordered-list="products"></div>
+        </div>
+    </div>
+</body>
+
+</html>

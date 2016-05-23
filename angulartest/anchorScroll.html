@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .controller('ctrl',function($scope,$location,$anchorScroll){
+            $scope.itemCount=50;
+            $scope.items=[];
+            for(var i=0;i<$scope.itemCount;i++){
+                $scope.items.push('item '+(i+1))
+            }
+            $scope.goTo=function(id){
+                $location.hash(id)
+                // $anchorScroll()
+                if(id=='top'){
+                    $anchorScroll()
+                }
+            }
+
+        })
+        .config(function($anchorScrollProvider){
+            $anchorScrollProvider.disableAutoScrolling()
+        })
+       
+
+
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div class="panel panel-default">
+        <h4 class="panel-heading">anchorScroll</h4>
+        <div class="panel-body">
+            <p id="top">this is top </p>
+            <button class="btn btn-default" ng-click="goTo('bottom')">go to bottom</button>
+            <p>
+                <ul class="list-group">
+                    <li ng-repeat="item in items" class="list-group-item">{{item}}</li>
+                </ul>
+            </p>
+            <p id="bottom">this is buttom</p>
+            <button class="btn btn-default" ng-click="goTo('top')">go to top</button>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

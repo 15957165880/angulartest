@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .controller('ctrl',function($scope,logService,$interval){
+            $scope.data={
+                citys:["new york","london","paris"],
+                totalClicks:0
+            }
+            // $scope.$watch('data.totalClicks',function(newVal){
+            //     logService.log(newVal)
+            // })
+            $interval(function(){
+                $scope.time=new Date()
+            },1000)
+
+
+
+
+
+
+
+
+        })
+        .directive('triButton',function(logProvider,logService){
+            return {
+                scope:{counter:'=counter'},
+                link:function(scope,ele,attrs){
+                    ele.on('click',function(event){
+                        scope.$apply(function(){
+                            scope.counter++
+                        })
+                        logProvider.log(scope.counter)
+                        logService.log(event.target.innerText)
+                    })
+                }
+            }
+        })
+        .value('citys',["new york","london","paris"])
+        .factory('logFactory',function(citys){
+            return{
+                log:function(msg){
+                    console.log(msg+1)
+                }
+            }
+        })
+        .service('logService',function(logFactory,logProvider,$location){
+            this.log=function(msg){
+                 console.log(msg)
+                 console.log($location)
+                 $location.path("/dd")
+            }
+        })
+        .provider('logProvider',function(){
+            return {
+                $get:function(logFactory){
+                    return {
+                        log:function(msg){
+                            console.log(msg)
+                        }
+                    }
+                }
+            }
+        })
+        .controller('ctrl',function($scope,$location){
+            $scope.$on("$locationChangeSuccess",function(event,newUrl){
+                $scope.url=newUrl
+                console.log($location)
+            })
+            $scope.setUrl=function(type){
+                switch(type){
+                    case "reset":
+                        $location.path("")
+                        $location.search("")
+                        $location.hash("")
+                        break;
+                    case "path":
+                        $location.path("/cityes/london")
+                        break;
+                    case "hash":
+                        $location.hash("north")
+                        break;
+                    case "search":
+                        $location.search({
+                            select:1,
+                            hotels:"andn"
+                        })
+                        break;
+                    case "url":
+                        $location.url("/dd")
+                        break;
+                }
+            }
+        })
+
+
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div class="panel panel-default">
+        <h4 class="panel-heading">url</h4>
+        <div class="panel-body">
+            <p>the url is {{url}} </p>
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="setUrl('reset')">reset</button>
+                <button class="btn btn-default" ng-click="setUrl('path')">path</button>
+                <button class="btn btn-default" ng-click="setUrl('hash')">hash</button>
+                <button class="btn btn-default" ng-click="setUrl('search')">search</button>
+                <button class="btn btn-default" ng-click="setUrl('url')">url</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

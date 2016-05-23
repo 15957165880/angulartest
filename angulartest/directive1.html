@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+
+        .value("products",[
+            {name:"apple",category:"fruit",price:1.20,expiry:10}
+            ,{name:"bananas",category:"fruit",price:2.40,expiry:7}
+            ,{name:"pears",category:"fruit",price:2.02,expiry:6}
+
+            ,{name:"tuna",category:"fish",price:20.02,expiry:3}
+            ,{name:"salmon",category:"fish",price:17.93,expiry:2}
+            ,{name:"trout",category:"fish",price:12.93,expiry:5}
+
+            ,{name:"beer",category:"drinks",price:2.99,expiry:365}
+            ,{name:"trout",category:"drinks",price:8.93,expiry:300}
+            ,{name:"trout1",category:"drinks",price:45.99,expiry:355}
+        ])
+        .controller('ctrl',function($scope,products){
+           $scope.products=products
+           $scope.datavalue='not sure'
+           $scope.selectedValue=1.20;
+
+        })
+        .directive("triButton",function(){
+            return {
+                restrict:"E",
+                replace:true,
+                require:"ngModel",
+                template:function(){
+                    return angular.element(document.querySelector("#triTemplate")).html();
+                },
+                // transclude:true,
+                link:function(scope,ele,attrs,ctrl){
+                    var setSelect=function(val){
+                        var buttons=ele.find("button")
+                        buttons.removeClass("btn-primary")
+                        for(var i=0;i<buttons.length;i++){
+                            if(buttons.eq(i).text()==val){
+                                buttons.eq(i).addClass("btn-primary")
+                            }
+                        }
+                    }
+                    // setSelect(scope.datavalue)
+                    scope.$watch('datavalue',function(){
+                        setSelect(scope.datavalue)
+                    })
+                    // ctrl.$render=function(){
+                    //     setSelect(ctrl.$viewValue||'not sure')
+                    //     console.log(ctrl.$viewValue)
+                    // }
+                    ele.on('click',function(event){
+                        // setSelect(event.target.innerText.toLowerCase())
+                        // console.log(event.target.innerText)
+                        scope.$apply(function(){
+                            // ctrl.$setViewValue(event.target.innerText.toLowerCase())
+                            scope.datavalue=event.target.innerText.toLowerCase()
+                        })
+                    })
+                }
+                   
+            }
+        })
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div>
+
+        <tri-button ng-model="datavalue" >
+            
+        </tri-button>
+
+    </div>
+    <div class="well">
+        value:
+        <select ng-model="datavalue">
+            <option >yes</option>
+            <option >no</option>
+            <option >not sure</option>
+        </select>
+    </div>
+    <div class="well">
+        <select ng-options="item.price as item.name group by item.category for item in products" ng-model="selectedValue"></select>
+    </div>
+</body>
+
+</html>

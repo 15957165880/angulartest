@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+
+    <script type="text/javascript">
+        angular.module("route",["ngRoute"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .value("todos",[
+                {action:"xuexi",complete:true,id:100,class:"study"},
+                {action:"chifan",complete:true,id:2,class:"life"},
+                {action:"shuijiao",complete:false,id:3,class:"life"},
+                {action:"xiuxi",complete:false,id:4,class:"life"},
+                {action:"jiaoliu",complete:false,id:5,class:"social "},
+                {action:"watchtv",complete:false,id:6,class:"life"},
+                {action:"read",complete:false,id:7,class:"study"},
+        ])
+        .controller('ctrl',function($scope,todos){
+            $scope.todos=todos
+
+            $scope.selectedValue1= 5
+
+        })
+
+        
+    </script>
+    
+
+</head>
+
+<body  class="text-capitalize">
+    <div class="panel" ng-controller="ctrl">
+   
+           
+        <form name="myForm" novalidate >   
+            <div class="well">
+               <div class="form-group row">
+                    <label>select an action</label>
+                    <select
+                        name="select"
+                        required
+                        ng-model="selectedValue"
+                        ng-options="item.action as item.action for item in todos"
+                    >
+                        <option value="1" selected>pick one</option>
+                    </select>
+                </div>
+               <div class="form-group row">
+                    <label>select an action</label>
+                    <select
+                        name="select1"
+                        required
+                        ng-model="selectedValue1"
+                        ng-options="item.id as item.action group by item.class for item in todos"
+                    >
+                        <option value="1" selected>pick one</option>
+                    </select>
+                </div>
+            </div>
+            <div class="well">
+                <p>selectedValue : {{selectedValue||'none'}}</p>
+                <p>selectedErr : {{myForm.select.$error}}</p>
+                <p>selectedName : {{myForm.select.$name}}</p>
+                <p>selectedValue1 : {{selectedValue1||'none'}}</p>
+                <p>select1Err : {{myForm.select1.$error}}</p>
+                <p>select1Name : {{myForm.select1.$name}}</p>
+            </div>
+        </form>
+           
+             
+
+    </div>
+</body>
+
+</html>
