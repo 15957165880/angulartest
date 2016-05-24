@@ -1,0 +1,51 @@
+[{
+        "name": "apple",
+        "category": "fruit",
+        "price": 1.20,
+        "expiry": 10
+    }, {
+        "name": "bananas",
+        "category": "fruit",
+        "price": 2.40,
+        "expiry": 7
+    }, {
+        "name": "pears",
+        "category": "fruit",
+        "price": 2.02,
+        "expiry": 6
+    }
+
+    , {
+        "name": "tuna",
+        "category": "fish",
+        "price": 20.02,
+        "expiry": 3
+    }, {
+        "name": "salmon",
+        "category": "fish",
+        "price": 17.93,
+        "expiry": 2
+    }, {
+        "name": "trout",
+        "category": "fish",
+        "price": 12.93,
+        "expiry": 5
+    }
+
+    , {
+        "name": "beer",
+        "category": "drinks",
+        "price": 2.99,
+        "expiry": 365
+    }, {
+        "name": "trout",
+        "category": "drinks",
+        "price": 8.93,
+        "expiry": 300
+    }, {
+        "name": "trout1",
+        "category": "drinks",
+        "price": 45.99,
+        "expiry": 355
+    }
+]

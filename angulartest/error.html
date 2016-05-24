@@ -42,7 +42,7 @@
         angular.module("route",["ngRoute"])
         angular.module("app",["route"])
         angular.module("app")
-        .controller('ctrl',function($scope,$location,$anchorScroll){
+        .controller('ctrl',function($scope,$location,$anchorScroll,$exceptionHandler1){
             $scope.itemCount=50;
             $scope.items=[];
             for(var i=0;i<$scope.itemCount;i++){
@@ -54,10 +54,25 @@
                     $anchorScroll()
                 }
             }
+            $scope.throwError=function(){
+                try{
+                    // throw new Error('error1')
+                    alert1(1)
+                }catch(err){
+                    $exceptionHandler1(err,'click')
+                    // console.log(err)
+                }
+                
+            }
 
         })
         .config(function($anchorScrollProvider){
             $anchorScrollProvider.disableAutoScrolling()
+        })
+        .factory('$exceptionHandler1',function($log){
+            return function(err,cause){
+                $log.error('Message:'+err.message+"(cause:"+cause+")")
+            }
         })
        
 
@@ -73,15 +88,8 @@
     <div class="panel panel-default">
         <h4 class="panel-heading">anchorScroll</h4>
         <div class="panel-body">
-            <p id="top">this is top </p>
-            <button class="btn btn-default" ng-click="goTo('bottom')">go to bottom</button>
-            <p>
-                <ul class="list-group">
-                    <li ng-repeat="item in items" class="list-group-item">{{item}}</li>
-                </ul>
-            </p>
-            <p id="bottom">this is buttom</p>
-            <button class="btn btn-default" ng-click="goTo('top')">go to top</button>
+
+            <button class="btn btn-default" ng-click="throwError()">throwError</button>
 
         </div>
 

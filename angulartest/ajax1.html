@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/public/angular-sanitize.js"></script>
+    
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute","ngSanitize"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .controller('ctrl',function($scope,$http){
+            $scope.loadData=function(){
+
+               $http.get("data/products.xml") 
+               .success(function(rep){
+                    console.log(rep)
+                    $scope.products=rep
+               })
+               .error(function(err){
+                    // console.log(err)
+               })
+               .then(
+                    function(response){
+
+                    },
+                    function(response){
+                        console.log(response)
+                    }
+                )
+            }
+            $scope.sendData=function(){
+                var config={
+                    headers:{
+                        "content-type":"application/xml"
+                    },
+                    transformRequest:function(data,headers){
+                        var rootElem=angular.element("<xml>")
+                        for(var i =0;i<data.length;i++){
+                            var prodElem=angular.element("<product>")
+                            prodElem.attr("name",data[i].name)
+                            rootElem.append(prodElem)
+                        }
+                        rootElem.children().wrap("<products>")
+                        return rootElem.html()
+                    }
+                }
+                $http.post("data/ajax.html",$scope.products,config)
+                .error(function(a,b,c,d){
+                    console.log(a)
+                    console.log(b)
+                    console.log(c)
+                    console.log(d)
+                })
+            }
+            $scope.getData=function(){
+               $http.get("data/products.json") 
+               .success(function(rep){
+                    // console.log(rep)
+                    // $scope.products=rep
+               })
+               .error(function(err){
+                    // console.log(err)
+               })
+
+            }
+
+
+        })
+        .config(function($httpProvider){
+           console.log($httpProvider.defaults.headers.common)
+           $httpProvider.defaults.headers.common.author="liaohs"
+           // console.log($httpProvider.defaults.transformResponse)
+           $httpProvider.defaults.transformResponse.push(function(data,headers){
+
+            console.log(headers("content-type"))
+            var reg=new RegExp('application/xml','g')
+            if(headers("content-type").match(reg)&&angular.isString(data)){
+                var products=[]
+                var lists=angular.element(data.trim()).children()
+                for(var i=0;i<lists.length;i++){
+                    var item=lists.eq(i)
+                    products.push({
+                        name:item.attr('name'),
+                        category:item.attr('category'),
+                        price:item.attr('price'),
+                       
+                    })
+                    
+                }
+                return products
+            }else{
+                    return data
+                }
+           })
+
+           $httpProvider.interceptors.push(function(){
+                return {
+                    request:function(config){
+                        // console.log(config)
+                        config.url="data/products.json" // 更改获取数据的路径
+                        return config
+                    },
+                    response:function(config){
+                        console.log(config)
+                        config.config.headers.server="node"
+                        return config
+                    }
+                }
+           })
+        })
+
+
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div class="panel panel-default">
+        <h4 class="panel-heading">ajax</h4>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>category</th>
+                        <th>price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-hide="products">
+                        <td colspan="3" class="text-center">no data</td>
+                    </tr>
+                    <tr ng-repeat="item in products">
+                        <td>{{item.name}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.price|number:1}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>{{productElems}}</div>
+            <p><button class="btn btn-primary" ng-click="loadData()">load data</button></p>
+            <p><button class="btn btn-primary" ng-click="sendData()">send data</button></p>
+            <p><button class="btn btn-primary" ng-click="getData()">get data</button></p>
+        </div>
+
+    </div>
+</body>
+
+</html>

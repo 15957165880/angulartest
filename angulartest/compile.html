@@ -29,6 +29,8 @@
 
     <script type="text/javascript" src="js/public/angular.js"></script>
     <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/public/angular-sanitize.js"></script>
+    
     <script type="text/ng-template" id="triTemplate">
         <div class="well">
             <div class="btn-group">
@@ -39,28 +41,28 @@
         </div>
     </script>
     <script type="text/javascript">
-        angular.module("route",["ngRoute"])
+        angular.module("route",["ngRoute","ngSanitize"])
         angular.module("app",["route"])
         angular.module("app")
-        .controller('ctrl',function($scope,$location,$anchorScroll){
-            $scope.itemCount=50;
-            $scope.items=[];
-            for(var i=0;i<$scope.itemCount;i++){
-                $scope.items.push('item '+(i+1))
-            }
-            $scope.goTo=function(id){
-                $location.hash(id)
-                if(id=='top'){
-                    $anchorScroll()
-                }
-            }
+        .controller('ctrl',function($scope){
+            $scope.citys=["london","paris","new yourk"]
+
 
         })
-        .config(function($anchorScrollProvider){
-            $anchorScrollProvider.disableAutoScrolling()
-        })
-       
 
+        .directive('eval1',function($compile){
+            return function(scope,ele,attrs){
+                // ele.append(angular.element("<ul><li ng-repeat=\"city in citys\">{{city}}</li></ul>"))
+                var content="<ul><li ng-repeat=\"city in citys\">{{city}}</li></ul>";
+                var listElem=angular.element(content)
+                var compileFn=$compile(listElem)
+                console.log(compileFn)
+                compileFn(scope)
+                ele.append(listElem)
+
+
+            }
+        })
 
          
     </script>
@@ -71,18 +73,10 @@
 
 <body  class="text-capitalize" ng-controller="ctrl">
     <div class="panel panel-default">
-        <h4 class="panel-heading">anchorScroll</h4>
+        <h4 class="panel-heading">price</h4>
         <div class="panel-body">
-            <p id="top">this is top </p>
-            <button class="btn btn-default" ng-click="goTo('bottom')">go to bottom</button>
-            <p>
-                <ul class="list-group">
-                    <li ng-repeat="item in items" class="list-group-item">{{item}}</li>
-                </ul>
-            </p>
-            <p id="bottom">this is buttom</p>
-            <button class="btn btn-default" ng-click="goTo('top')">go to top</button>
 
+            <span eval1></span>
         </div>
 
     </div>

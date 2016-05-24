@@ -29,6 +29,8 @@
 
     <script type="text/javascript" src="js/public/angular.js"></script>
     <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/public/angular-sanitize.js"></script>
+    
     <script type="text/ng-template" id="triTemplate">
         <div class="well">
             <div class="btn-group">
@@ -39,10 +41,10 @@
         </div>
     </script>
     <script type="text/javascript">
-        angular.module("route",["ngRoute"])
+        angular.module("route",["ngRoute","ngSanitize"])
         angular.module("app",["route"])
         angular.module("app")
-        .controller('ctrl',function($scope,$location,$anchorScroll){
+        .controller('ctrl',function($scope,$location,$anchorScroll,$exceptionHandler1,$sce){
             $scope.itemCount=50;
             $scope.items=[];
             for(var i=0;i<$scope.itemCount;i++){
@@ -54,10 +56,31 @@
                     $anchorScroll()
                 }
             }
+            $scope.throwError=function(){
+                try{
+                    // throw new Error('error1')
+                    alert1(1)
+                }catch(err){
+                    $exceptionHandler1(err,'click')
+                    // console.log(err)
+                }
+                
+            }
+            $scope.htmlData="<p>this is <b onclick='alert(\"dangerous\")' style=\"color:red;\">dangerous</b> data </p>"
+            $scope.htmlData2=$sce.trustAsHtml($scope.htmlData) //信任 
+            $scope.$watch('htmlData',function(n,o){
+                // $scope.htmlData1=$sanitize(n) //净化 去除危险字符
+                // $scope.htmlData2=$sce.trustAsHtml(n) //信任 
+            })
 
         })
         .config(function($anchorScrollProvider){
             $anchorScrollProvider.disableAutoScrolling()
+        })
+        .factory('$exceptionHandler1',function($log){
+            return function(err,cause){
+                $log.error('Message:'+err.message+"(cause:"+cause+")")
+            }
         })
        
 
@@ -73,15 +96,12 @@
     <div class="panel panel-default">
         <h4 class="panel-heading">anchorScroll</h4>
         <div class="panel-body">
-            <p id="top">this is top </p>
-            <button class="btn btn-default" ng-click="goTo('bottom')">go to bottom</button>
-            <p>
-                <ul class="list-group">
-                    <li ng-repeat="item in items" class="list-group-item">{{item}}</li>
-                </ul>
-            </p>
-            <p id="bottom">this is buttom</p>
-            <button class="btn btn-default" ng-click="goTo('top')">go to top</button>
+            <p>{{htmlData}}</p>
+            <p ng-bind-html="htmlData"></p>
+
+            <p>{{htmlData1}}</p>
+            <p ng-bind-html="htmlData1"></p>
+            <p ng-bind-html="htmlData2"></p>
 
         </div>
 

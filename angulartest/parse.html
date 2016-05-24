@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AngularTest1</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style type="text/css">
+        tr.red{background-color:lightcoral;}
+        tr.green{background-color:lightgreen;}
+        tr.blue{background-color:lightblue;}
+
+        .red{background-color:lightcoral;}
+        .green{background-color:lightgreen;}
+        .blue{background-color:lightblue;}
+
+        span.error{
+            color:rgb(187, 55, 55);
+
+        }
+        span.summary.ng-invalid{color:red;}
+        span.summary.ng-valid{color:green;}
+
+
+    </style>
+
+    <script type="text/javascript" src="js/public/angular.js"></script>
+    <script type="text/javascript" src="js/public/angular-route.js"></script>
+    <script type="text/javascript" src="js/public/angular-sanitize.js"></script>
+    
+    <script type="text/ng-template" id="triTemplate">
+        <div class="well">
+            <div class="btn-group">
+                <button class="btn btn-default text-capitalize">yes</button>
+                <button class="btn btn-default text-capitalize">no</button>
+                <button class="btn btn-default text-capitalize">not sure</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        angular.module("route",["ngRoute","ngSanitize"])
+        angular.module("app",["route"])
+        angular.module("app")
+        .controller('ctrl',function($scope){
+            $scope.price=2.13
+
+        })
+        .directive('eval',function($parse){
+            return{
+                link:function(scope,ele,attrs){
+                    scope.$watch(attrs.eval,function(n,o){
+                        console.log(n)
+                        try{
+                            var exFn=$parse(scope.expr);
+                            var result=exFn()
+                            if(result==undefined){
+                                result="no result"
+                            }
+                        }catch(err){
+                            result="cannot evalute expression"
+                        }
+                        ele.text(result)
+                    })
+                }
+            }
+        })
+    
+       
+        //$parse 把数据表达 转成函数  再运行 再返回值
+        angular.module("app")
+        .directive('eval1',function($parse){
+            var fn=$parse("total|currency")
+            console.log(fn)
+            return{
+                scope:{
+                    amount:"=amount",
+                    tax:"="
+                },
+                link:function(scope,ele,attrs){
+                    scope.$watch('amount',function(n,o){
+                        var localData={
+                            total:Number(n)*Number(scope.tax)
+                        }
+                        // ele.text(localData.total)
+                        ele.text(fn(scope,localData))
+                    })
+
+                }
+            }
+        })
+         
+    </script>
+
+    
+
+</head>
+
+<body  class="text-capitalize" ng-controller="ctrl">
+    <div class="panel panel-default">
+        <h4 class="panel-heading">price</h4>
+        <div class="panel-body">
+            <div class="well">
+                <p><input type="text" class="form-control" ng-model="expr"></p>
+                <div>
+                    result:<span eval="expr"></span>
+                </div>
+            </div>
+
+
+            <div class="well">
+                <p><input type="text" class="form-control" ng-model="dataVal"></p>
+                <div>
+                    result:<span eval1 amount="dataVal" tax="10"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
